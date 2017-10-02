@@ -31,8 +31,35 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="headers/LevelActions.h" />
+		<Unit filename="headers/LevelDrawer.h" />
+		<Unit filename="headers/LevelEntities.h" />
+		<Unit filename="headers/LevelLoader.h" />
+		<Unit filename="headers/LevelResolutionChecker.h" />
+		<Unit filename="headers/testFunctions.h">
+			<Option target="Debug" />
+		</Unit>
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="sources/LevelActions.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="sources/LevelDrawer.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="sources/LevelEntities.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="sources/LevelLoader.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="sources/LevelResolutionChecker.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="sources/testFunctions.c">
+			<Option compilerVar="CC" />
+			<Option target="Debug" />
 		</Unit>
 		<Extensions>
 			<code_completion />

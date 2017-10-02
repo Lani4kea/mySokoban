@@ -1,27 +1,39 @@
-/************************************************
- * @author : Maret Kilian
- * @date : 28/09/2017
+/**************************************************************************************************
+ * \brief   The different entities and "objects" (struct) presents in the game
+ *
+ *          This file contains the definitions of the different structs and
+ *          enums used in the game.
+ * \author  Maret Kilian, Hugo Patin
+ * \date    28/09/2017
  * @
- ***********************************************/
+ *************************************************************************************************/
 #ifndef LEVELENTITIES_H_INCLUDED
 #define LEVELENTITIES_H_INCLUDED
 
 typedef enum { false, true } bool;
+typedef enum Movement { UP, DOWN, LEFT, RIGHT } Movement;
 
-struct Bloc{
+typedef struct Position{
+    int x;
+    int y;
+} Position;
+
+typedef struct Bloc{
     const int id = 0;
-    int xPos = 0;
-    int yPos = 0;
-    bool isMovable = false;
+    Position pos;
+    bool isMovable = true;
     bool isPlayer = false;
-    const char asciiTexture = ' ';
-};
+    char asciiTexture = ' ';
+} Bloc;
 
-struct Level{
+Bloc* create_Bloc(int id, int x, int y);
+void destroy_Bloc(Bloc* b);
+
+typedef struct Level{
     const char* levelName;
     const int matrixWidth = 0;
     const int matrixHeight = 0;
     Bloc** matrix;
-};
+} Level;
 
 #endif // LEVELENTITIES_H_INCLUDED
