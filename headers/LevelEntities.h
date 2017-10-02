@@ -19,11 +19,11 @@ typedef struct Position{
 } Position;
 
 typedef struct Bloc{
-    const int id = 0;
+    int id;
     Position pos;
-    bool isMovable = true;
-    bool isPlayer = false;
-    char asciiTexture = ' ';
+    bool isMovable;
+    bool isPlayer;
+    char asciiTexture;
 } Bloc;
 
 Bloc* create_Bloc(int id, int x, int y);
@@ -31,8 +31,8 @@ void destroy_Bloc(Bloc* b);
 
 typedef struct Level{
     const char* levelName;
-    const int matrixWidth = 0;
-    const int matrixHeight = 0;
+    const int matrixWidth;
+    const int matrixHeight;
     Bloc** matrix;
 } Level;
 

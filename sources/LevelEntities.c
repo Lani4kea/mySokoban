@@ -1,10 +1,9 @@
+#include <stdlib.h>
 #include "../headers/LevelEntities.h"
 
 Bloc* create_Bloc(int id, int x, int y) {
   Bloc* b = malloc(sizeof(Bloc));
-  Position pos = Position();
-  pos.x = x;
-  pos.y = y;
+  Position pos = {.x = x, .y = y};
   b->id = id;
   b->pos = pos;
 
@@ -46,12 +45,13 @@ Bloc* create_Bloc(int id, int x, int y) {
         break;
     default:
         b = NULL;
+        free(b);
   }
 
   return b;
 }
 
 void destroy_Bloc(Bloc* b){
-    b->pos = NULL;
-    free((void*)b);
+    b = NULL;
+    free(b);
 }

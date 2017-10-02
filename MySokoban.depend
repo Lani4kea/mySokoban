@@ -1,0 +1,25 @@
+# depslib dependency file v1.0
+1446671344 source:c:\users\kilian\desktop\gameengine\sokoban\mysokoban\main.c
+	<stdio.h>
+	<stdlib.h>
+
+1506968603 source:c:\users\kilian\desktop\gameengine\sokoban\mysokoban\sources\levelactions.c
+	<stdlib.h>
+	<stdio.h>
+	"../headers/LevelActions.h"
+
+1506968303 c:\users\kilian\desktop\gameengine\sokoban\mysokoban\headers\levelactions.h
+	"LevelEntities.h"
+
+1506968223 c:\users\kilian\desktop\gameengine\sokoban\mysokoban\headers\levelentities.h
+
+1506715563 source:c:\users\kilian\desktop\gameengine\sokoban\mysokoban\sources\leveldrawer.c
+
+1506975757 source:c:\users\kilian\desktop\gameengine\sokoban\mysokoban\sources\levelentities.c
+	<stdlib.h>
+	"../headers/LevelEntities.h"
+
+1506590835 source:c:\users\kilian\desktop\gameengine\sokoban\mysokoban\sources\levelloader.c
+
+1506590879 source:c:\users\kilian\desktop\gameengine\sokoban\mysokoban\sources\levelresolutionchecker.c
+
