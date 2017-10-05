@@ -45,30 +45,32 @@ void destroy_Bloc(Bloc* b){
     free(b);
 }
 
-void definePlayer(Bloc* player){
-    if(player->baseValue == 4){
-        player->curValue = 6;
+bool definePlayer(Bloc* player){
+
+    if(player->baseValue == GOAL){
+
+        player->curValue = PLAYER_ON_GOAL;
+
+    }else if(player->baseValue == FLOOR){
+
+        player->curValue = PLAYER;
+
     }else{
-        player->curValue = 5;
+
+        return false;
+
     }
+    return true;
 }
 
 void init_Matrix(){
-    //lvl->matrix = (Bloc***)malloc(lvl->matrixHeight * lvl->matrixWidth * sizeof(Bloc));
 
     lvl->matrix = calloc(lvl->matrixWidth ,sizeof(Bloc*));
-    Bloc  *b = calloc(lvl->matrixWidth * lvl->matrixHeight ,sizeof(Bloc));
+    Bloc  *b    = calloc(lvl->matrixWidth * lvl->matrixHeight ,sizeof(Bloc));
 
     for (int i = 0; i < lvl->matrixWidth; i++){
         lvl->matrix[i] = &b[i * lvl->matrixHeight];
     }
 
     lvl->boxIndices = calloc(lvl->nbBoxes ,sizeof(Position));
-
-    /*for (int i = 0; i < lvl->matrixWidth; i++)
-        for (int j = 0; j < lvl->matrixHeight; j++)
-            a[i][j] = 0;*/
-
-    /*free(b);
-    free(a);*/
 }

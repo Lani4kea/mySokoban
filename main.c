@@ -53,8 +53,6 @@ int main()
 
     while(!isGameWon){
 
-        findPlayer(lvl->player);
-        //printf("Player position = [%d][%d]\n", lvl->player->pos.x, lvl->player->pos.y);
         updateMatrix();
         ASCIIDrawLevel();
 
@@ -90,7 +88,7 @@ int main()
                     break;
             }
             if(myMove != ERROR){
-                int res = movePlayer(&myMove, lvl->player);
+                bool res = movePlayer(&myMove, lvl->player);
             }
         }
     }

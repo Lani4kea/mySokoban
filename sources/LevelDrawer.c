@@ -3,19 +3,6 @@
 #include "../headers/LevelDrawer.h"
 #include "../headers/shared.h"
 
-void findPlayer(Bloc *player){
-    /*for(size_t i = 0; i < lvl->matrixWidth; ++i){
-        for(size_t j = 0; j < lvl->matrixHeight; ++j){
-            if(lvl->matrix[i][j]->curValue == PLAYER || lvl->matrix[i][j]->curValue == PLAYER_ON_GOAL){
-                player = lvl->matrix[i][j];
-                player->pos.x = i;
-                player->pos.y = j;
-                printf("Player position = [%d][%d]\n", i, j);
-                printf("Player position = [%d][%d]\n", player->pos.x, player->pos.y);
-            }
-        }
-    }*/
-}
 
 void updateMatrix(){
 

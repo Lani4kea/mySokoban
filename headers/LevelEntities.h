@@ -43,7 +43,7 @@ typedef struct Level{
 } Level;
 
 void init_Matrix();
-void definePlayer(Bloc* player);
+bool definePlayer(Bloc* player);
 Level* create_Level(const char* levelName, const int matrixHeight, const int matrixWidth, const int nbBoxes);
 void destroy_Level(Level* lvl);
 
