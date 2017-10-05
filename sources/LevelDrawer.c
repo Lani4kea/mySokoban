@@ -6,8 +6,8 @@
 
 void updateMatrix(){
 
-    for(size_t i = 0; i < lvl->matrixWidth; ++i){
-        for(size_t j = 0; j < lvl->matrixHeight; ++j){
+    for(size_t i = 0; i < lvl->matrixHeight; ++i){
+        for(size_t j = 0; j < lvl->matrixWidth; ++j){
             lvl->matrix[i][j]->pos.x = i;
             lvl->matrix[i][j]->pos.y = j;
             if(lvl->matrix[i][j]->curValue == PLAYER || lvl->matrix[i][j]->curValue == PLAYER_ON_GOAL){
@@ -35,9 +35,9 @@ void updateMatrix(){
 }
 
 void const ASCIIDrawLevel(){
-    char * str = calloc(lvl->matrixHeight, sizeof(char));
-    for(size_t i = 0; i < lvl->matrixWidth; ++i){
-        for(size_t j = 0; j < lvl->matrixHeight; ++j){
+    char * str = calloc(lvl->matrixWidth, sizeof(char));
+    for(size_t i = 0; i < lvl->matrixHeight; ++i){
+        for(size_t j = 0; j < lvl->matrixWidth; ++j){
             str[j] = idToASCIIValue(lvl->matrix[i][j]->curValue);
         }
         printf("%s\n", str);

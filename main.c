@@ -12,34 +12,34 @@ Level* lvl;
 int main()
 {
 
-    lvl = create_Level("Level 1", 10,10,6);
+    lvl = create_Level("Level 1", 11,19,6);
 
-    int elems[200] =   {1,1,1,1,1,1,1,1,1,1,
-                        1,0,0,0,0,0,0,0,0,1,
-                        1,0,2,0,2,0,0,0,0,1,
-                        1,1,1,1,1,1,1,0,0,1,
-                        1,0,0,0,0,0,0,0,0,1,
-                        1,0,0,0,2,0,0,0,0,1,
-                        1,0,5,0,2,0,2,0,0,1,
-                        1,4,4,4,0,0,2,0,0,1,
-                        1,4,4,4,0,0,0,0,0,1,
-                        1,1,1,1,1,1,1,1,1,1};
+    int elems[209] =   {0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,
+                        0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,
+                        0,0,0,0,1,2,0,0,1,0,0,0,0,0,0,0,0,0,0,
+                        0,0,1,1,1,0,0,2,1,1,0,0,0,0,0,0,0,0,0,
+                        0,0,1,0,0,2,0,2,0,1,0,0,0,0,0,0,0,0,0,
+                        1,1,1,0,1,0,1,1,0,1,0,0,0,1,1,1,1,1,1,
+                        1,0,0,0,1,0,1,1,0,1,1,1,1,1,0,0,4,4,1,
+                        1,0,2,0,0,2,0,0,0,0,0,0,0,0,0,0,4,4,1,
+                        1,1,1,1,1,0,1,1,1,0,1,5,1,1,0,0,4,4,1,
+                        0,0,0,0,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,
+                        0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0};
 
     init_Matrix(lvl);
     int nbBoxes = 0;
 
-    for(size_t i = 0; i < lvl->matrixWidth; ++i){
-        for(size_t j = 0; j < lvl->matrixHeight; ++j){
-            lvl->matrix[i][j] = create_Bloc((BlocType)elems[i*10 + j], i, j);
-            if(elems[i*10 + j] == 2 || elems[i*10 + j] == 3){
+    for(size_t i = 0; i < lvl->matrixHeight; ++i){
+        for(size_t j = 0; j < lvl->matrixWidth; ++j){
+            lvl->matrix[i][j] = create_Bloc((BlocType)elems[i*19 + j], i, j);
+            if(elems[i*19 + j] == 2 || elems[i*19 + j] == 3){
                 lvl->boxIndices[i] = create_Position(i,j);
             }
-            if(elems[i*10 + j] == 2 || elems[i*10 + j] == 3){
+            if(elems[i*19 + j] == 2 || elems[i*19 + j] == 3){
                 lvl->boxIndices[nbBoxes] = create_Position(i,j);
-                //printf("Position no %d created\n", nbBoxes);
                 ++nbBoxes;
             }
-            if(elems[i*10 + j] == 5){
+            if(elems[i*19 + j] == 5){
                 lvl->player = lvl->matrix[i][j];
                 definePlayer(lvl->player);
             }

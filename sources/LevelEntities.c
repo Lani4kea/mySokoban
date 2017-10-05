@@ -68,8 +68,8 @@ void init_Matrix(){
     lvl->matrix = calloc(lvl->matrixWidth ,sizeof(Bloc*));
     Bloc  *b    = calloc(lvl->matrixWidth * lvl->matrixHeight ,sizeof(Bloc));
 
-    for (int i = 0; i < lvl->matrixWidth; i++){
-        lvl->matrix[i] = &b[i * lvl->matrixHeight];
+    for (int i = 0; i < lvl->matrixHeight; i++){
+        lvl->matrix[i] = &b[i * lvl->matrixWidth];
     }
 
     lvl->boxIndices = calloc(lvl->nbBoxes ,sizeof(Position));
