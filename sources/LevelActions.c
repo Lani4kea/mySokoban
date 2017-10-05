@@ -1,275 +1,179 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "../headers/LevelActions.h"
+#include "../headers/shared.h"
 
-/*
- * Steps to execute for every move of the player :
- *  - 1) Check the bloc's type (either 5 or 6)
- *  - 2) Check the type of bloc where the player wants to go
- *      --> If bloc.id = 0 ==> Old bloc.id = 0/4, new bloc.id = 5 (player)
- *      --> If bloc.id = 1 ==> Movement impossible
- *      --> If bloc.id = 2 ==> Check for the type of bloc next to the box (same direction)
- *          --> If bloc.id = 1, 2, 3 ==> Movement impossible
- *          --> If bloc.id = 0 ==> Old bloc.id = 0, new bloc.id = 5, new bloc+1.id = 2
- *          --> If bloc.id = 4 ==> Old bloc.id = 0, new bloc.id = 5, new bloc+1.id = 3
- *      --> If bloc.id = 3 ==> Check for the type of bloc next to the box (same direction)
- *          --> If bloc.id = 1, 2, 3 ==> Movement impossible
- *          --> If bloc.id = 0 ==> Old bloc.id = 0, new bloc.id = 6, new bloc+1.id = 2
- *          --> If bloc.id = 4 ==> Old bloc.id = 0, new bloc.id = 6, new bloc+1.id = 3
- *      --> If bloc.id = 4 ==> Old bloc.id = 0/4, new bloc.id = 6 (player)
- *      --> If bloc.id = 5 or 6 ==> There might be a problem ?
- */
-int movePlayer(Level *level, Movement *mov, Bloc *oldBloc){
+int movePlayer(Movement* mov, Bloc* player){
 
-    Bloc * newBloc = NULL;        // This bloc refers to the bloc where the player should be after the move
-    Bloc * nextNewBloc = NULL;    // This bloc is next to the future position of the player (if he moves a box for example)
-    int res = 0;
-
-    res = checkValidMove(level, mov, oldBloc);
-
+    int res = checkValidMove(lvl, mov, player); // at this point, we know if the next move is valid. No need for further verif
     if(res){
-        // the adjacent blocs are stored according to the next move
+
+        Bloc* nextBloc      = calloc(1,sizeof(Bloc));   // the bloc adjacent to the current one being moved in the direction
+                                                        // of the movement (n+1)
+        Bloc* nextBlocN2    = calloc(1,sizeof(Bloc));   // the bloc adjacent to the previous bloc (n+2)
+        const Position pos  = player->pos;
+
         switch(*mov){
+
             case UP:
-                newBloc = &(level->matrix[oldBloc->pos.x][oldBloc->pos.y-1]);
-                nextNewBloc = (res == 2) ? &(level->matrix[oldBloc->pos.x][oldBloc->pos.y-2]) : NULL;
+
+                nextBloc    = lvl->matrix[pos.x-1][pos.y];
+                nextBlocN2  = !(pos.x-1) ? NULL : lvl->matrix[pos.x-2][pos.y];
+
                 break;
             case DOWN:
-                newBloc = &(level->matrix[oldBloc->pos.x][oldBloc->pos.y+1]);
-                nextNewBloc = (res == 2) ? &(level->matrix[oldBloc->pos.x][oldBloc->pos.y+2]) : NULL;
+
+                nextBloc    = lvl->matrix[pos.x+1][pos.y];
+                nextBlocN2  = (pos.x+1 == lvl->matrixHeight - 1) ? NULL : lvl->matrix[pos.x+2][pos.y];
+
                 break;
             case LEFT:
-                newBloc = &(level->matrix[oldBloc->pos.x-2][oldBloc->pos.y]);
-                nextNewBloc = (res == 2) ? &(level->matrix[oldBloc->pos.x-2][oldBloc->pos.y]) : NULL;
+
+                nextBloc    = lvl->matrix[pos.x][pos.y-1];
+                nextBlocN2  = !(pos.y-1) ? NULL : lvl->matrix[pos.x][pos.y-2];
+
                 break;
             case RIGHT:
-                newBloc = &(level->matrix[oldBloc->pos.x+1][oldBloc->pos.y]);
-                nextNewBloc = (res == 2) ? &(level->matrix[oldBloc->pos.x+2][oldBloc->pos.y]) : NULL;
+
+                nextBloc    = lvl->matrix[pos.x][pos.y+1];
+                nextBlocN2  = (pos.y+1 == lvl->matrixWidth - 1) ? NULL : lvl->matrix[pos.x][pos.y+2];
+
                 break;
             default:
                 return 0;
         }
 
+        switch(nextBloc->curValue){
+            case FLOOR:
 
-        // If oldBloc.id == 5, the current bloc to move is a player
-        // we already checked if the movement was valid, therefore, we don't need further verification
-        if(oldBloc->id == 5){
+                nextBloc->curValue = PLAYER;
+                player->curValue = player->baseValue;
+                break;
 
-            switch(newBloc->id){
-                case 0: swapBlocs(level, oldBloc->pos, mov);
-                    break;
-                case 2:
-                case 3:
-                case 4:
-                default : break;
+            case BOX:
 
-            }
+                if(nextBlocN2->curValue == FLOOR){
 
+                    nextBlocN2->curValue = BOX;
 
-        // If oldBloc.id == 6, the current bloc to move is a player on a "goal" bloc
-        }else if(oldBloc->id == 6){
+                }else{
 
-        // Else, the current bloc is not a player bloc and therefore can't move directly
-        }else{
-            return 0;
+                    nextBlocN2->curValue = BOX_ON_GOAL;
+
+                }
+
+                nextBloc->curValue = PLAYER;
+                player->curValue = player->baseValue;
+
+                for(size_t i = 0; i < lvl->nbBoxes; ++i){
+                    if(lvl->boxIndices[i]->x == nextBloc->pos.x && lvl->boxIndices[i]->y == nextBloc->pos.y){
+                        lvl->boxIndices[i] = &nextBlocN2->pos;
+                        break;
+                    }
+                }
+
+                break;
+
+            case BOX_ON_GOAL:
+
+                if(nextBlocN2->curValue == FLOOR){
+
+                    nextBlocN2->curValue = BOX;
+
+                }else{
+
+                    nextBlocN2->curValue = BOX_ON_GOAL;
+
+                }
+
+                nextBloc->curValue = PLAYER_ON_GOAL;
+                player->curValue = player->baseValue;
+
+                for(size_t i = 0; i < lvl->nbBoxes; ++i){
+                    if(lvl->boxIndices[i]->x == nextBloc->pos.x && lvl->boxIndices[i]->y == nextBloc->pos.y){
+                        lvl->boxIndices[i] = &nextBlocN2->pos;
+                        break;
+                    }
+                }
+
+                break;
+
+            case GOAL:
+
+                nextBloc->curValue = PLAYER_ON_GOAL;
+                player->curValue = player->baseValue;
+                break;
+
+            default:
+                return 0;
         }
     }
+    return res;
 }
-// NON FORMAL DOCUMENTATION
-// return a value depending of the type of bloc being moved :
-// return 0 if the move is not valid (id == 1 or something preventing a box move)
-// return 1 if the player move on an empty case / goal case (id == 0 || id == 4)
-// return 2 if the player push a box / placed box (id == 2 || id == 3)
-int checkValidMove(Level *level, Movement *mov, Bloc *blocToMove){
 
+int checkValidMove(Level* lvl, Movement* mov, Bloc* blocToMove){
 
-    int x = blocToMove->pos.x;
-    int y = blocToMove->pos.y;
+    Bloc* nextBloc      = calloc(1,sizeof(Bloc));       // the bloc adjacent to the current one being moved in the direction
+                                                        // of the movement (n+1)
+    Bloc* nextBlocN2    = calloc(1,sizeof(Bloc));       // the bloc adjacent to the previous bloc (n+2)
+    const Position pos  = blocToMove->pos;
 
     switch(*mov){
         case UP:
 
-            if(!y){
-                return 0;
-            }
+            if(!pos.x) return 0;
 
-            if(level->matrix[x][y-1].id == 1){
-                return 0;
-            }
+            nextBloc    = lvl->matrix[pos.x-1][pos.y];
+            nextBlocN2  = !(pos.x-1) ? NULL : lvl->matrix[pos.x-2][pos.y];
+            break;
 
-            if(level->matrix[x][y-1].id == 2 ||
-               level->matrix[x][y-1].id == 3 ){
-
-                if(!(y-1)){
-                    return 0;
-                }
-
-                if(level->matrix[x][y-2].id >= 1 ||
-                   level->matrix[x][y-2].id <= 3 ){
-                    return 0;
-                }
-                return 2;
-            }
-
-            return 1;
         case DOWN:
 
-            if(!(y == level->matrixHeight - 1)){
-                return 0;
-            }
+            if(pos.x == lvl->matrixHeight - 1) return 0;
 
-            if(level->matrix[x][y+1].id == 1){
-                return 0;
-            }
+            nextBloc    = lvl->matrix[pos.x+1][pos.y];
+            nextBlocN2  = (pos.x+1 == lvl->matrixHeight - 1) ? NULL : lvl->matrix[pos.x+2][pos.y];
+            break;
 
-            if(level->matrix[x][y+1].id == 2 ||
-               level->matrix[x][y+1].id == 3 ){
-
-                if(!(y+1 == level->matrixHeight - 1)){
-                    return 0;
-                }
-
-                if(level->matrix[x][y+2].id >= 1 ||
-                   level->matrix[x][y+2].id <= 3 ){
-                    return 0;
-                }
-                return 2;
-            }
-
-            return 1;
         case LEFT:
 
-            if(!x){
-                return 0;
-            }
+            if(!pos.y) return 0;
 
-            if(level->matrix[x-1][y].id == 1){
-                return 0;
-            }
+            nextBloc    = lvl->matrix[pos.x][pos.y-1];
+            nextBlocN2  = !(pos.y-1) ? NULL : lvl->matrix[pos.x][pos.y-2];
+            break;
 
-            if(level->matrix[x-1][y].id == 2 ||
-               level->matrix[x-1][y].id == 3 ){
-
-                if(!(x-1)){
-                    return 0;
-                }
-
-                if(level->matrix[x-2][y].id >= 1 ||
-                   level->matrix[x-2][y].id <= 3 ){
-                    return 0;
-                }
-                return 2;
-            }
-
-            return 1;
         case RIGHT:
 
-            if(!(x == level->matrixWidth - 1)){
-                return 0;
-            }
+            if(pos.y == lvl->matrixWidth - 1) return 0;
 
-            if(level->matrix[x+1][y].id == 1){
-                return 0;
-            }
+            nextBloc    = lvl->matrix[pos.x][pos.y+1];
+            nextBlocN2  = (pos.y+1 == lvl->matrixWidth - 1) ? NULL : lvl->matrix[pos.x][pos.y+2];
+            break;
 
-            if(level->matrix[x+1][y].id == 2 ||
-               level->matrix[x+1][y].id == 3 ){
-
-                if(!(x+1 == level->matrixWidth - 1)){
-                    return 0;
-                }
-
-                if(level->matrix[x+2][y].id >= 1 ||
-                   level->matrix[x+2][y].id <= 3 ){
-                    return 0;
-                }
-                return 2;
-            }
-
-            return 1;
         default:
             return 0;
     }
+
+    if(!nextBloc->canBeActive) return 0;    // if the next bloc is a wall
+
+    if(nextBloc->curValue == BOX || nextBloc->curValue == BOX_ON_GOAL){     // if the next bloc is a box
+
+        if(nextBlocN2 == NULL || !nextBlocN2->canBeActive || nextBlocN2->curValue == BOX || nextBlocN2->curValue == BOX_ON_GOAL) return 0; // if the n+2 bloc can't be moved
+
+    }
+
+    return 1;
 }
 
-// this function swaps two blocs in a level based on their position
-int swapBlocs(Level *level, Position oldPos, const Movement *mov){
+Level* create_Level(const char* levelName, const int matrixHeight, const int matrixWidth, const int nbBoxes){
+    Level level = {.levelName = levelName, .matrixHeight = matrixHeight, .matrixWidth = matrixWidth, .nbBoxes = nbBoxes};
+    lvl = malloc(sizeof *lvl);
 
-    Position newPos = oldPos;
+    if (lvl == NULL) abort();
+    memcpy(lvl, &level, sizeof *lvl);
 
-    switch(*mov){
-        case UP: --newPos.y;
-            break;
-        case DOWN: ++newPos.y;
-            break;
-        case LEFT: --newPos.x;
-            break;
-        case RIGHT: ++newPos.x;
-            break;
-        default: return 0;
-    }
-
-    if(oldPos.x < 0 || oldPos.y < 0 || newPos.x < 0 || newPos.y < 0 ||
-       oldPos.x >= level->matrixWidth || oldPos.y >= level->matrixWidth ||
-       newPos.x >= level->matrixWidth || newPos.y >= level->matrixWidth){
-
-       return 0;
-
-    }
-
-    Bloc tempBloc = level->matrix[oldPos.x][oldPos.y];
-    level->matrix[oldPos.x][oldPos.y] = level->matrix[newPos.x][newPos.y];
-    level->matrix[newPos.x][newPos.y] = tempBloc;
-
-    Position tempPos = level->matrix[oldPos.x][oldPos.y].pos;
-    level->matrix[oldPos.x][oldPos.y].pos = newPos;
-    level->matrix[newPos.x][newPos.y].pos = tempPos;
+    return lvl;
 }
-
-int pushBox(Level *level, Position playerPos, const Movement *mov){
-
-    Position oldBlocPos = playerPos;
-    Position newBlocPos = playerPos;
-
-    switch(*mov){
-        case UP:
-            oldBlocPos.y -= 1;
-            newBlocPos.y -= 2;
-            break;
-        case DOWN:
-            oldBlocPos.y += 1;
-            newBlocPos.y += 2;
-            break;
-        case LEFT:
-            oldBlocPos.x -= 1;
-            newBlocPos.x -= 2;
-            break;
-        case RIGHT:
-            oldBlocPos.x += 1;
-            newBlocPos.x += 2;
-            break;
-        default: return 0;
-    }
-
-    if(oldBlocPos.x < 0 || oldBlocPos.y < 0 || newBlocPos.x < 0 || newBlocPos.y < 0 ||
-       playerPos.x  >= level->matrixWidth || playerPos.y  >= level->matrixWidth ||
-       oldBlocPos.x >= level->matrixWidth || oldBlocPos.y >= level->matrixWidth ||
-       newBlocPos.x >= level->matrixWidth || newBlocPos.y >= level->matrixWidth){
-
-       return 0;
-
-    }
-
-    if(level->matrix[playerPos.x][playerPos.y].id == 5){
-
-        level->matrix[playerPos.x][playerPos.y] = *create_Bloc(0, playerPos.x, playerPos.y);
-
-    }else if(level->matrix[playerPos.x][playerPos.y].id == 6){
-
-
-
-    }else{
-        return 0;
-    }
-
-}
+void destroy_Level(Level* level);

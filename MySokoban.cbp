@@ -36,6 +36,8 @@
 		<Unit filename="headers/LevelEntities.h" />
 		<Unit filename="headers/LevelLoader.h" />
 		<Unit filename="headers/LevelResolutionChecker.h" />
+		<Unit filename="headers/MenuDisplay.h" />
+		<Unit filename="headers/shared.h" />
 		<Unit filename="headers/testFunctions.h">
 			<Option target="Debug" />
 		</Unit>
@@ -55,6 +57,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="sources/LevelResolutionChecker.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="sources/MenuDisplay.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="sources/testFunctions.c">

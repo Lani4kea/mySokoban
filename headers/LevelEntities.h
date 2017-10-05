@@ -11,13 +11,43 @@
 #define LEVELENTITIES_H_INCLUDED
 
 typedef enum { false, true } bool;
-typedef enum Movement { UP, DOWN, LEFT, RIGHT } Movement;
+typedef enum BlocType{ FLOOR, WALL, BOX, BOX_ON_GOAL, GOAL, PLAYER, PLAYER_ON_GOAL } BlocType;
+typedef enum Movement { UP, DOWN, LEFT, RIGHT, ERROR } Movement;
 
 typedef struct Position{
     int x;
     int y;
 } Position;
 
+Position* create_Position(int x, int y);
+void destroy_Position(Position* p);
+
+typedef struct Bloc{
+    Position pos;
+    bool canBeActive;
+    BlocType baseValue;
+    BlocType curValue;
+} Bloc;
+
+Bloc* create_Bloc(BlocType bbt, int x, int y);
+void destroy_Bloc(Bloc* b);
+
+typedef struct Level{
+    const char* levelName;
+    const int   matrixWidth;
+    const int   matrixHeight;
+    const int   nbBoxes;
+    Bloc***     matrix;
+    Position**   boxIndices;
+    Bloc*       player;
+} Level;
+
+void init_Matrix();
+void definePlayer(Bloc* player);
+Level* create_Level(const char* levelName, const int matrixHeight, const int matrixWidth, const int nbBoxes);
+void destroy_Level(Level* lvl);
+
+/*
 typedef struct Bloc{
     int id;
     Position pos;
@@ -25,15 +55,7 @@ typedef struct Bloc{
     bool isPlayer;
     char asciiTexture;
 } Bloc;
-
 Bloc* create_Bloc(int id, int x, int y);
-void destroy_Bloc(Bloc* b);
-
-typedef struct Level{
-    const char* levelName;
-    const int matrixWidth;
-    const int matrixHeight;
-    Bloc** matrix;
-} Level;
+void destroy_Bloc(Bloc* b);*/
 
 #endif // LEVELENTITIES_H_INCLUDED

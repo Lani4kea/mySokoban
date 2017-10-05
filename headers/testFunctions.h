@@ -12,7 +12,7 @@ typedef enum TestFail{
     LEVEL_MATRIX_ERROR
 } TestFail;
 
-void DEBUG_PRINT_ERROR(const TestFail *msg, const Level *lvl, const int x, const int y, const Bloc *bloc);
+void DEBUG_PRINT_ERROR(const TestFail msg, const Level *lvl, const int x, const int y, const Bloc *bloc);
 int checkBlocProperties(const Level *lvl);
 
 #endif // TESTFUNCTIONS_H_INCLUDED

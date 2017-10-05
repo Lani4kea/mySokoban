@@ -1,25 +1,58 @@
 # depslib dependency file v1.0
-1446671344 source:c:\users\kilian\desktop\gameengine\sokoban\mysokoban\main.c
+1507199741 source:c:\users\kilian\desktop\gameengine\sokoban\mysokoban\main.c
 	<stdio.h>
 	<stdlib.h>
+	"headers/LevelEntities.h"
+	"headers/LevelActions.h"
+	"headers/LevelDrawer.h"
+	"headers/MenuDisplay.h"
+	"headers/shared.h"
 
-1506968603 source:c:\users\kilian\desktop\gameengine\sokoban\mysokoban\sources\levelactions.c
+1507200323 source:c:\users\kilian\desktop\gameengine\sokoban\mysokoban\sources\levelactions.c
 	<stdlib.h>
 	<stdio.h>
+	<string.h>
 	"../headers/LevelActions.h"
+	"../headers/shared.h"
 
-1506968303 c:\users\kilian\desktop\gameengine\sokoban\mysokoban\headers\levelactions.h
+1507193456 c:\users\kilian\desktop\gameengine\sokoban\mysokoban\headers\levelactions.h
 	"LevelEntities.h"
 
-1506968223 c:\users\kilian\desktop\gameengine\sokoban\mysokoban\headers\levelentities.h
+1507197767 c:\users\kilian\desktop\gameengine\sokoban\mysokoban\headers\levelentities.h
 
-1506715563 source:c:\users\kilian\desktop\gameengine\sokoban\mysokoban\sources\leveldrawer.c
+1507200340 source:c:\users\kilian\desktop\gameengine\sokoban\mysokoban\sources\leveldrawer.c
+	<stdlib.h>
+	<stdio.h>
+	"../headers/LevelDrawer.h"
+	"../headers/shared.h"
 
-1506975757 source:c:\users\kilian\desktop\gameengine\sokoban\mysokoban\sources\levelentities.c
+1507197831 source:c:\users\kilian\desktop\gameengine\sokoban\mysokoban\sources\levelentities.c
 	<stdlib.h>
 	"../headers/LevelEntities.h"
+	"../headers/shared.h"
 
 1506590835 source:c:\users\kilian\desktop\gameengine\sokoban\mysokoban\sources\levelloader.c
 
 1506590879 source:c:\users\kilian\desktop\gameengine\sokoban\mysokoban\sources\levelresolutionchecker.c
+
+1507130574 source:c:\users\kilian\desktop\gameengine\sokoban\mysokoban\sources\testfunctions.c
+	<stdlib.h>
+	<stdio.h>
+	"../headers/testFunctions.h"
+	"../headers/LevelEntities.h"
+
+1507022576 c:\users\kilian\desktop\gameengine\sokoban\mysokoban\headers\testfunctions.h
+	"../headers/LevelEntities.h"
+
+1507194117 c:\users\kilian\desktop\gameengine\sokoban\mysokoban\headers\leveldrawer.h
+	"LevelEntities.h"
+
+1507049108 c:\users\kilian\desktop\gameengine\sokoban\mysokoban\headers\menudisplay.h
+
+1507049156 source:c:\users\kilian\desktop\gameengine\sokoban\mysokoban\sources\menudisplay.c
+	<stdlib.h>
+	<stdio.h>
+	"../headers/MenuDisplay.h"
+
+1507193598 c:\users\kilian\desktop\gameengine\sokoban\mysokoban\headers\shared.h
 

@@ -3,13 +3,13 @@
 #include "../headers/testFunctions.h"
 #include "../headers/LevelEntities.h"
 
-void DEBUG_PRINT_ERROR(const TestFail *msg, const Level *lvl, const int x, const int y, const Bloc *bloc){
-    switch(*msg){
+void DEBUG_PRINT_ERROR(const TestFail msg, const Level *lvl, const int x, const int y, const Bloc *bloc){
+    switch(msg){
         case POSITION_ERROR:
             printf("Position error at [%d][%d] : \n expected %d and %d \ngot %d, and %d", x, y, x, y, bloc->pos.x, bloc->pos.y);
             break;
         case IS_PLAYER_ERROR:
-            printf("Bloc property error at [%d][%d] : \n Bloc type: %d \n expected bloc.isPlayer = %s \n got bloc.isPlayer = %s", x, y, bloc->id, !bloc->id ? "true" : "false" , bloc->id ? "true" : "false");
+            printf("Bloc property error at [%d][%d] : \n Bloc type: %d \n expected bloc.isPlayer = %s \n got bloc.isPlayer = %s", x, y, (int)bloc->curValue, (int)!bloc->curValue ? "true" : "false" , bloc->curValue ? "true" : "false");
             break;
         case IS_MOVABLE_ERROR:
             break;
@@ -23,12 +23,12 @@ void DEBUG_PRINT_ERROR(const TestFail *msg, const Level *lvl, const int x, const
             printf("unknown error");
     }
 }
-
+/*
 int checkBlocProperties(const Level *lvl){
     for(size_t i = 0; i < lvl->matrixWidth; ++i){
         for(size_t j = 0; j < lvl->matrixWidth; ++j){
 
-            Bloc curBloc = lvl->matrix[i][j];
+            Bloc * curBloc = lvl->matrix[i][j];
 
             if(curBloc.pos.x != i || curBloc.pos.y != j){
                 return 0;
@@ -69,4 +69,4 @@ int checkBlocProperties(const Level *lvl){
         }
     }
     return 1;
-}
+}*/
